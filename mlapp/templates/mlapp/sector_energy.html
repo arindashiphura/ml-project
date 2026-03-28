@@ -1,0 +1,31 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Energy{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Energy &amp; water resources</h1>
+  <p class="hero__lead">
+    Hydropower-dominated systems need rainfall variability translated into inflow risk and
+    backup planning. This module surfaces narrative guidance alongside the risk engine.
+  </p>
+</section>
+
+<div class="grid grid--2">
+  <article class="card">
+    <h2>Use cases</h2>
+    <ul class="list-check">
+      <li>Reservoir rule-curve stress when wet or dry bands persist</li>
+      <li>Grid operators: diesel / spinning reserve when hydro uncertainty rises</li>
+      <li>Rural mini-grids: solar vs hydro mix messaging</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h2>Tooling</h2>
+    <p class="muted">
+      Combine <strong>Weather tool</strong> (rainfall mm) with <strong>Risk tool</strong> for composite stress.
+    </p>
+    <div class="cta-row">
+      <a class="btn" href="{% url 'tools_risk' %}">Assess risk</a>
+    </div>
+  </article>
+</div>
+{% endblock %}

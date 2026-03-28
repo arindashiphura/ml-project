@@ -1,0 +1,48 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Climate risk{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Composite climate risk</h1>
+  <p class="hero__lead">
+    Combines a short rainfall outlook with dry-spell length and recent heavy-rain events.
+    Outputs are structured for agriculture, energy, and government stakeholders.
+  </p>
+</section>
+
+<form method="post" class="django-form card" style="max-width:520px">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn">Assess risk</button>
+</form>
+
+{% if forecast and breakdown %}
+<div class="result-panel">
+  <h3>Forecast input to risk model</h3>
+  <p class="muted">Next-week rainfall estimate: <strong>{{ forecast.next_week_rain_mm }} mm</strong> ({{ forecast.band }})</p>
+</div>
+
+<div class="result-panel">
+  <h3>Overall</h3>
+  <p>Score: <strong>{{ breakdown.score }}</strong> ·
+    <span class="risk-badge risk-badge--{% if breakdown.level == 'low' %}low{% elif breakdown.level == 'moderate' %}moderate{% elif breakdown.level == 'high' %}high{% else %}severe{% endif %}">{{ breakdown.level }}</span>
+  </p>
+  <h4>Drivers</h4>
+  <ul class="list-check">{% for d in breakdown.drivers %}<li>{{ d }}</li>{% endfor %}</ul>
+</div>
+
+<div class="grid grid--2">
+  <div class="result-panel">
+    <h3>Agriculture</h3>
+    <p>{{ breakdown.agriculture }}</p>
+  </div>
+  <div class="result-panel">
+    <h3>Energy</h3>
+    <p>{{ breakdown.energy }}</p>
+  </div>
+  <div class="result-panel" style="grid-column:1/-1">
+    <h3>Government</h3>
+    <p>{{ breakdown.government }}</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Climate Intelligence{% endblock %} · Uganda</title>
+  <link rel="stylesheet" href="{% static 'mlapp/css/app.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="{% url 'home' %}">Climate<span>Intel</span> UG</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'sector_agriculture' %}">Agriculture</a>
+        <a href="{% url 'sector_energy' %}">Energy</a>
+        <a href="{% url 'sector_government' %}">Government</a>
+        <a href="{% url 'tools_weather' %}">Weather tool</a>
+        <a href="{% url 'tools_risk' %}">Risk tool</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    Demo ML + rules engine — connect ERA5, CHIRPS, or national station data for operational forecasts.
+  </footer>
+</body>
+</html>

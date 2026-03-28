@@ -1,0 +1,29 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Agriculture{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Agriculture intelligence</h1>
+  <p class="hero__lead">
+    Align planting, fertiliser, and irrigation decisions with short-term rainfall outlook
+    and explicit drought / flood risk drivers. Extension services can pair this with local soil maps.
+  </p>
+</section>
+
+<div class="grid grid--2">
+  <article class="card">
+    <h2>What the platform adds</h2>
+    <ul class="list-check">
+      <li>Weekly rainfall band (dry / moderate / wet) per region</li>
+      <li>Risk score with dry-spell and heavy-rain context</li>
+      <li>Action-oriented copy for field teams (not a black box)</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h2>Next data integrations</h2>
+    <p class="muted">
+      Soil moisture probes, crop calendars by district, pest pressure indices, and farmer SMS feedback loops.
+    </p>
+    <a class="btn" href="{% url 'tools_weather' %}">Run forecast</a>
+  </article>
+</div>
+{% endblock %}

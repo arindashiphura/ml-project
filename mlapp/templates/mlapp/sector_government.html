@@ -1,0 +1,29 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Government{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Government &amp; resilience</h1>
+  <p class="hero__lead">
+    District disaster management, water resources, and agriculture ministries need consistent
+    risk language and drivers — not only a colour map. This layer emphasises coordination cues.
+  </p>
+</section>
+
+<div class="grid grid--2">
+  <article class="card">
+    <h2>Policy-ready outputs</h2>
+    <ul class="list-check">
+      <li>Composite score 0–100 with listed drivers (dry spell, floods, season)</li>
+      <li>Sector paragraphs suitable for bulletins (adapt before release)</li>
+      <li>APIs for integration into national dashboards</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h2>Governance note</h2>
+    <p class="muted">
+      Operational early warning should be validated by UNMA / official hydro-meteorological products.
+      This stack is a decision-support prototype.
+    </p>
+  </article>
+</div>
+{% endblock %}

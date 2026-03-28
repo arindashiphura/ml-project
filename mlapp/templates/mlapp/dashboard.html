@@ -1,0 +1,118 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard">
+  <section class="dashboard-hero">
+    <div class="dashboard-hero__inner">
+      <p class="dashboard-badge">Uganda · live overview</p>
+      <h1>Operations dashboard</h1>
+      <p class="hero__lead">
+        Run forecasts and risk scores from the tools below. For production, plug in
+        authoritative observations and ensemble forecasts (Open-Meteo, CHIRPS, NMHS).
+      </p>
+      <div class="dashboard-actions">
+        <a class="btn" href="{% url 'tools_weather' %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/><circle cx="12" cy="12" r="4"/></svg>
+          Weather outlook
+        </a>
+        <a class="btn btn--ghost" href="{% url 'tools_risk' %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          Climate risk
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="dashboard-kpis">
+    <article class="dash-kpi">
+      <div class="dash-kpi__icon dash-kpi__icon--regions" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      </div>
+      <div>
+        <p class="dash-kpi__label">Coverage</p>
+        <p class="dash-kpi__value">{{ regions|length }}</p>
+        <p>Regions: Central, Eastern, Western, Northern</p>
+      </div>
+    </article>
+    <article class="dash-kpi">
+      <div class="dash-kpi__icon dash-kpi__icon--api" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0114 0"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41"/><path d="M2 12h2M20 12h2"/></svg>
+      </div>
+      <div>
+        <p class="dash-kpi__label">Climate APIs</p>
+        <p class="dash-kpi__value">2</p>
+        <p>Forecast &amp; risk endpoints for integrations.</p>
+        <code>/api/climate/forecast/</code>
+        <code>/api/climate/risk/</code>
+      </div>
+    </article>
+    <article class="dash-kpi">
+      <div class="dash-kpi__icon dash-kpi__icon--lab" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6M10 9v9M14 9v9M5 3h14l-1 7H6L5 3zM5 21h14"/></svg>
+      </div>
+      <div>
+        <p class="dash-kpi__label">ML lab</p>
+        <p class="dash-kpi__value">1</p>
+        <p>Iris sklearn smoke test (non-climate).</p>
+        <code>/api/lab/iris/</code>
+      </div>
+    </article>
+  </div>
+
+  <div class="dashboard-panel">
+    <div class="dashboard-panel__head">
+      <h2>Platform activity (last 7 days)</h2>
+      <span class="dashboard-panel__hint">
+        {{ analytics_week_total }} total events · peak day {{ analytics_peak_day }}
+      </span>
+    </div>
+    {% if analytics_week_total == 0 %}
+    <p class="dash-chart__empty">No runs yet. Use <a href="{% url 'tools_weather' %}">Weather</a> or
+      <a href="{% url 'tools_risk' %}">Risk</a> tools, or call the APIs — counts appear here.</p>
+    {% endif %}
+    <div class="dash-chart" role="img" aria-label="Events per day for the last seven days">
+      {% for row in chart_series %}
+      <span
+        class="dash-chart__bar{% if row.count == 0 %} dash-chart__bar--empty{% endif %}"
+        style="height: {% if row.count == 0 %}6{% else %}{{ row.height_pct }}{% endif %}%"
+        title="{{ row.count }} event{{ row.count|pluralize }} · {{ row.date_short }}"
+      ></span>
+      {% endfor %}
+    </div>
+    <div class="dash-chart__labels">
+      {% for row in chart_series %}<span>{{ row.label }}</span>{% endfor %}
+    </div>
+    <div class="dash-chart__counts">
+      {% for row in chart_series %}<span>{{ row.count }}</span>{% endfor %}
+    </div>
+  </div>
+
+  <h2 class="section-title section-title--dash">Sector hubs</h2>
+  <div class="dashboard-sectors">
+    <article class="dash-sector dash-sector--ag">
+      <h3>
+        <svg class="dash-sector__glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 5.5A6.98 6.98 0 0 1 12 20c-.1 0-.2 0-.3 0z"/></svg>
+        Agriculture
+      </h3>
+      <p>Planting windows, drought stress, and input timing.</p>
+      <a class="btn btn--ghost" href="{% url 'sector_agriculture' %}">Open sector</a>
+    </article>
+    <article class="dash-sector dash-sector--en">
+      <h3>
+        <svg class="dash-sector__glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" aria-hidden="true"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+        Energy
+      </h3>
+      <p>Hydropower inflow outlook and grid stress narratives.</p>
+      <a class="btn btn--ghost" href="{% url 'sector_energy' %}">Open sector</a>
+    </article>
+    <article class="dash-sector dash-sector--gov">
+      <h3>
+        <svg class="dash-sector__glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" aria-hidden="true"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 21v-4h6v4"/></svg>
+        Government
+      </h3>
+      <p>Early warning framing and district coordination prompts.</p>
+      <a class="btn btn--ghost" href="{% url 'sector_government' %}">Open sector</a>
+    </article>
+  </div>
+</div>
+{% endblock %}

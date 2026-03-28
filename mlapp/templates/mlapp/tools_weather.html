@@ -1,0 +1,39 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Weather forecast{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Weekly rainfall outlook</h1>
+  <p class="hero__lead">
+    Enter recent conditions. The model returns an estimated total for the <strong>next 7 days</strong> (mm)
+    and a qualitative band. Results are illustrative until trained on real station or gridded data.
+  </p>
+</section>
+
+<form method="post" class="django-form card" style="max-width:520px">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn">Generate outlook</button>
+</form>
+
+{% if forecast %}
+<div class="result-panel">
+  <h3>Outlook</h3>
+  <p><strong>{{ forecast.next_week_rain_mm }} mm</strong> expected next week ·
+    <span class="risk-badge {% if forecast.band == 'dry' %}risk-badge--high{% elif forecast.band == 'wet' %}risk-badge--moderate{% else %}risk-badge--low{% endif %}">{{ forecast.band }}</span>
+  </p>
+  <p>{{ forecast.summary }}</p>
+</div>
+{% endif %}
+
+{% if risk %}
+<div class="result-panel">
+  <h3>Linked risk snapshot</h3>
+  <p>Score: <strong>{{ risk.score }}</strong> ·
+    <span class="risk-badge risk-badge--{% if risk.level == 'low' %}low{% elif risk.level == 'moderate' %}moderate{% elif risk.level == 'high' %}high{% else %}severe{% endif %}">{{ risk.level }}</span>
+  </p>
+  <ul class="list-check">
+    {% for d in risk.drivers %}<li>{{ d }}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

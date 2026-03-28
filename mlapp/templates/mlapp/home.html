@@ -1,0 +1,45 @@
+{% extends "mlapp/base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="pill">Uganda · Government · Agriculture · Energy</p>
+  <h1>Climate intelligence for decisions that matter</h1>
+  <p class="hero__lead">
+    A single place to explore rainfall outlooks (ML demo), composite climate risk,
+    and sector guidance tailored to Uganda’s regions — from crop planning to hydro
+    planning and district early action.
+  </p>
+  <div class="cta-row">
+    <a class="btn" href="{% url 'dashboard' %}">Open dashboard</a>
+    <a class="btn btn--ghost" href="{% url 'tools_weather' %}">Run weather forecast</a>
+  </div>
+</section>
+
+<div class="grid grid--3">
+  <article class="card">
+    <h2>Weather patterns</h2>
+    <p class="muted">Short-horizon rainfall estimates from a model trained on Uganda-like seasonality (bimodal rains).</p>
+    <p><a href="{% url 'tools_weather' %}">Forecast tool →</a></p>
+  </article>
+  <article class="card">
+    <h2>Climate risk</h2>
+    <p class="muted">Transparent scoring from dry spells, rainfall extremes, and seasonal context — mapped to sector actions.</p>
+    <p><a href="{% url 'tools_risk' %}">Risk tool →</a></p>
+  </article>
+  <article class="card">
+    <h2>Sectors</h2>
+    <p class="muted">Agriculture (planting, inputs), energy (hydro variability), government (early warning & coordination).</p>
+    <p><a href="{% url 'dashboard' %}">View modules →</a></p>
+  </article>
+</div>
+
+<h2 class="section-title">Regions in scope</h2>
+<div class="grid grid--2">
+  {% for r in regions %}
+  <article class="card">
+    <h3>{{ r.name }}</h3>
+    <p class="muted">{{ r.notes }}</p>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}
